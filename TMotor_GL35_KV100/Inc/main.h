@@ -106,6 +106,10 @@ void Error_Handler(void);
 #define UART_TX_GPIO_Port GPIOB
 #define UART_RX_Pin GPIO_PIN_4
 #define UART_RX_GPIO_Port GPIOB
+#define M1_ENCODER_A_Pin GPIO_PIN_6
+#define M1_ENCODER_A_GPIO_Port GPIOB
+#define M1_ENCODER_B_Pin GPIO_PIN_7
+#define M1_ENCODER_B_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
