@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -52,6 +53,8 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart2;
 
+osThreadId mediumFrequencyHandle;
+osThreadId safetyHandle;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -67,6 +70,9 @@ static void MX_OPAMP2_Init(void);
 static void MX_OPAMP3_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_USART2_UART_Init(void);
+void startMediumFrequencyTask(void const * argument);
+extern void StartSafetyTask(void const * argument);
+
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -121,6 +127,39 @@ int main(void)
 
   /* USER CODE END 2 */
 
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of mediumFrequency */
+  osThreadDef(mediumFrequency, startMediumFrequencyTask, osPriorityNormal, 0, 128);
+  mediumFrequencyHandle = osThreadCreate(osThread(mediumFrequency), NULL);
+
+  /* definition and creation of safety */
+  osThreadDef(safety, StartSafetyTask, osPriorityAboveNormal, 0, 128);
+  safetyHandle = osThreadCreate(osThread(safety), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -182,7 +221,7 @@ void SystemClock_Config(void)
 static void MX_NVIC_Init(void)
 {
   /* TIM1_BRK_TIM15_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 4, 1);
+  HAL_NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 4, 0);
   HAL_NVIC_EnableIRQ(TIM1_BRK_TIM15_IRQn);
   /* TIM1_UP_TIM16_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM1_UP_TIM16_IRQn, 0, 0);
@@ -191,7 +230,7 @@ static void MX_NVIC_Init(void)
   HAL_NVIC_SetPriority(ADC1_2_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
   /* USART2_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(USART2_IRQn, 3, 1);
+  HAL_NVIC_SetPriority(USART2_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(USART2_IRQn);
   /* EXTI15_10_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 3, 0);
@@ -668,6 +707,45 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_startMediumFrequencyTask */
+/**
+  * @brief  Function implementing the mediumFrequency thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_startMediumFrequencyTask */
+__weak void startMediumFrequencyTask(void const * argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
