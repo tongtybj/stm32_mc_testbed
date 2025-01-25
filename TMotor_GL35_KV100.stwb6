@@ -1057,7 +1057,8 @@
       },
       "applicationConfig": {
         "freeRTOS": {
-          "enabled": false
+          "enabled": true,
+          "useFunctions": true
         },
         "dacDebug": {
           "enabled": false
