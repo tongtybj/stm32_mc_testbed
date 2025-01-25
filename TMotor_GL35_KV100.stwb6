@@ -1,7 +1,7 @@
 {
   "description": "",
   "checkList": {},
-  "version": 10,
+  "version": 11,
   "workBenchVersion": "6.3.2",
   "workBenchVersionFileCreation": "6.3.2",
   "algorithm": "FOC",
@@ -1101,7 +1101,7 @@
       },
       "driveManagement_0": {
         "currentReg": {
-          "controlMode": "position",
+          "controlMode": "speed",
           "autoPI": true,
           "KpKi": {
             "P": "Number.NaN",
@@ -1172,15 +1172,15 @@
           "executionRate": "Number.NaN",
           "KpKiKd": {
             "P": {
-              "num": 100,
+              "num": 10000,
               "den": 1024
             },
             "D": {
-              "num": 16,
+              "num": 1000,
               "den": 16
             },
             "I": {
-              "num": 0,
+              "num": 1000,
               "den": 32768
             }
           }
@@ -1286,6 +1286,15 @@
             "revupToFocSwitchOverEnabled": true,
             "focSwitchOverDuration": "Number.NaN"
           }
+        }
+      },
+      "stageConfig_0": {
+        "potentiometer": {
+          "enable": true,
+          "samplingTime": "Number.NaN"
+        },
+        "esc": {
+          "enabled": false
         }
       }
     }

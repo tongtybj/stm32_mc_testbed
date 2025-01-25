@@ -102,30 +102,6 @@ PID_Handle_t PIDIdHandle_M1 =
   .hKdDivisorPOW2      = 0x0000U,
 };
 
-PID_Handle_t PID_PosParamsM1 =
-{
-  .hDefKpGain          = (int16_t)PID_POSITION_KP_GAIN,
-  .hDefKiGain          = (int16_t)PID_POSITION_KI_GAIN,
-  .hDefKdGain          = (int16_t)PID_POSITION_KD_GAIN,
-  .wUpperIntegralLimit = (int32_t)(NOMINAL_CURRENT * PID_POSITION_KIDIV),
-  .wLowerIntegralLimit = (int32_t)(-NOMINAL_CURRENT * PID_POSITION_KIDIV),
-  .hUpperOutputLimit   = (int16_t)NOMINAL_CURRENT,
-  .hLowerOutputLimit   = -(int16_t)NOMINAL_CURRENT,
-  .hKpDivisor          = (uint16_t)PID_POSITION_KPDIV,
-  .hKiDivisor          = (uint16_t)PID_POSITION_KIDIV,
-  .hKdDivisor          = (uint16_t)PID_POSITION_KDDIV,
-  .hKpDivisorPOW2      = (uint16_t)PID_POSITION_KPDIV_LOG,
-  .hKiDivisorPOW2      = (uint16_t)PID_POSITION_KIDIV_LOG,
-  .hKdDivisorPOW2      = (uint16_t)PID_POSITION_KDDIV_LOG,
-};
-
-PosCtrl_Handle_t PosCtrlM1 =
-{
-  .SamplingTime  = 1.0f/MEDIUM_FREQUENCY_TASK_RATE,
-  .SysTickPeriod = 1.0f/SYS_TICK_FREQUENCY,
-  .AlignmentCfg  = TC_ABSOLUTE_ALIGNMENT_NOT_SUPPORTED,
-};
-
 /**
   * @brief  SpeednTorque Controller parameters Motor 1.
   */
@@ -231,14 +207,12 @@ NTC_Handle_t *pTemperatureSensor[NBR_OF_MOTORS] = {&TempSensor_M1};
 PID_Handle_t *pPIDIq[NBR_OF_MOTORS]             = {&PIDIqHandle_M1};
 PID_Handle_t *pPIDId[NBR_OF_MOTORS]             = {&PIDIdHandle_M1};
 PQD_MotorPowMeas_Handle_t *pMPM[NBR_OF_MOTORS]  = {&PQD_MotorPowMeasM1};
-PosCtrl_Handle_t *pPosCtrl[NBR_OF_MOTORS]       = {&PosCtrlM1};
 
 MCI_Handle_t Mci[NBR_OF_MOTORS] =
 {
   {
     .pSTC = &SpeednTorqCtrlM1,
     .pFOCVars = &FOCVars[0],
-    .pPosCtrl = &PosCtrlM1,
     .pPWM = &PWM_Handle_M1._Super,
     .lastCommand = MCI_NOCOMMANDSYET,
     .hFinalSpeed = 0,

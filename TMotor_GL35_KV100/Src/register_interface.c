@@ -205,13 +205,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
           break;
         }
 
-        case MC_REG_POSITION_CTRL_STATE:
-        case MC_REG_POSITION_ALIGN_STATE:
-        {
-          retVal = MCP_ERROR_RO_REG;
-          break;
-        }
-
         default:
         {
           retVal = MCP_ERROR_UNKNOWN_REG;
@@ -334,24 +327,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
         case MC_REG_DAC_USER2:
           break;
 
-        case MC_REG_POSITION_KP:
-        {
-          PID_SetKP(&PID_PosParamsM1, regdata16);
-          break;
-        }
-
-        case MC_REG_POSITION_KI:
-        {
-          PID_SetKI(&PID_PosParamsM1, regdata16);
-          break;
-        }
-
-        case MC_REG_POSITION_KD:
-        {
-          PID_SetKD(&PID_PosParamsM1, regdata16);
-          break;
-        }
-
         case MC_REG_SPEED_KP_DIV:
         {
           PID_SetKPDivisorPOW2(&PIDSpeedHandle_M1, regdata16);
@@ -403,24 +378,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
         case MC_REG_I_Q_KD_DIV:
         {
           PID_SetKDDivisorPOW2(&PIDIqHandle_M1, regdata16);
-          break;
-        }
-
-        case MC_REG_POSITION_KP_DIV:
-        {
-          PID_SetKPDivisorPOW2(&PID_PosParamsM1, regdata16);
-          break;
-        }
-
-        case MC_REG_POSITION_KI_DIV:
-        {
-          PID_SetKIDivisorPOW2(&PID_PosParamsM1, regdata16);
-          break;
-        }
-
-        case MC_REG_POSITION_KD_DIV:
-        {
-          PID_SetKDDivisorPOW2(&PID_PosParamsM1, regdata16);
           break;
         }
 
@@ -522,18 +479,6 @@ uint8_t RI_SetRegisterMotor1(uint16_t regID, uint8_t typeID, uint8_t *data, uint
             torque = *(uint32_t *)rawData; //cstat !MISRAC2012-Rule-11.3
             duration = *(uint16_t *)&rawData[4]; //cstat !MISRAC2012-Rule-11.3
             MCI_ExecTorqueRamp(pMCIN, (int16_t)torque, duration);
-            break;
-          }
-
-          case MC_REG_POSITION_RAMP:
-          {
-            FloatToU32 Position;
-            FloatToU32 Duration;
-            /* 32 bits access are split into 2x16 bits access */
-            Position.U32_Val = ((int32_t)(*(int16_t *)&rawData[2]))<<16 | *(uint16_t *)rawData;
-            /* 32 bits access are split into 2x16 bits access */
-            Duration.U32_Val = ((int32_t)(*(int16_t *)&rawData[6]))<<16 | *(uint16_t *)&rawData[4];
-            MCI_ExecPositionCommand(pMCIN, Position.Float_Val, Duration.Float_Val);
             break;
           }
 
@@ -742,18 +687,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
               break;
             }
 
-            case MC_REG_POSITION_CTRL_STATE:
-            {
-              *data = (uint8_t) TC_GetControlPositionStatus(&PosCtrlM1);
-              break;
-            }
-
-            case MC_REG_POSITION_ALIGN_STATE:
-            {
-              *data = (uint8_t) TC_GetAlignmentStatus(&PosCtrlM1);
-              break;
-            }
-
             default:
             {
               retVal = MCP_ERROR_UNKNOWN_REG;
@@ -932,24 +865,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
             case MC_REG_DAC_USER2:
               break;
 
-            case MC_REG_POSITION_KP:
-            {
-              *regdata16 = PID_GetKP( &PID_PosParamsM1);
-              break;
-            }
-
-            case MC_REG_POSITION_KI:
-            {
-              *regdata16 = PID_GetKI( &PID_PosParamsM1);
-              break;
-            }
-
-            case MC_REG_POSITION_KD:
-            {
-              *regdata16 = PID_GetKD( &PID_PosParamsM1);
-              break;
-            }
-
             case MC_REG_SPEED_KP_DIV:
             {
               *regdataU16 = (uint16_t)PID_GetKPDivisorPOW2(&PIDSpeedHandle_M1);
@@ -1003,24 +918,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
               break;
             }
 
-            case MC_REG_POSITION_KP_DIV:
-            {
-              *regdataU16 = PID_GetKPDivisorPOW2(&PID_PosParamsM1);
-              break;
-            }
-
-            case MC_REG_POSITION_KI_DIV:
-            {
-              *regdataU16 = PID_GetKIDivisorPOW2(&PID_PosParamsM1);
-              break;
-            }
-
-            case MC_REG_POSITION_KD_DIV:
-            {
-              *regdataU16 = PID_GetKDDivisorPOW2(&PID_PosParamsM1);
-              break;
-            }
-
             default:
             {
               retVal = MCP_ERROR_UNKNOWN_REG;
@@ -1059,14 +956,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
             case MC_REG_SPEED_REF:
             {
               *regdata32 = (((int32_t)MCI_GetMecSpeedRefUnit(pMCIN) * U_RPM) / SPEED_UNIT);
-              break;
-            }
-
-            case MC_REG_CURRENT_POSITION:
-            {
-              FloatToU32 ReadVal;
-              ReadVal.Float_Val = MCI_GetCurrentPosition(pMCIN);
-              *regdataU32 = ReadVal.U32_Val;
               break;
             }
 
@@ -1217,19 +1106,6 @@ uint8_t RI_GetRegisterGlobal(uint16_t regID,uint8_t typeID,uint8_t * data,uint16
             *rawSize = 4;
             *iqref = (uint16_t)MCI_GetIqdref(pMCIN).q;
             *idref = (uint16_t)MCI_GetIqdref(pMCIN).d;
-            break;
-          }
-
-          case MC_REG_POSITION_RAMP:
-          {
-            float Position;
-            float Duration;
-
-            *rawSize = 8;
-            Position = TC_GetMoveDuration(&PosCtrlM1);   /* Does this duration make sense ? */
-            Duration = TC_GetTargetPosition(&PosCtrlM1);
-            (void)memcpy(rawData, &Position, 4);
-            (void)memcpy(&rawData[4], &Duration, 4);
             break;
           }
 
