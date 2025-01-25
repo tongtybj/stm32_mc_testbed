@@ -72,7 +72,7 @@
 #define TFDIFFERENTIAL_TERM_ENABLING        DISABLE
 
 #define PID_SPEED_KP_DEFAULT                3973/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
-#define PID_SPEED_KI_DEFAULT                629/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
+#define PID_SPEED_KI_DEFAULT                111/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
 #define PID_SPEED_KD_DEFAULT                0/(SPEED_UNIT/10) /* Workbench compute the gain for 01Hz unit*/
 
 #define POSITION_LOOP_FREQUENCY_HZ          (uint16_t)1000 /*!< Execution rate of position control regulation loop (Hz) */
@@ -99,7 +99,7 @@
 #define DEFAULT_TORQUE_COMPONENT_A          0
 #define DEFAULT_FLUX_COMPONENT_A            0
 
-#define PID_POSITION_KP_GAIN                100
+#define PID_POSITION_KP_GAIN                20
 #define PID_POSITION_KI_GAIN                0
 #define PID_POSITION_KD_GAIN                16
 #define PID_POSITION_KPDIV                  1024

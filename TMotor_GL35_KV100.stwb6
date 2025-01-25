@@ -1078,7 +1078,7 @@
         "maxCurrent": "Number.NaN",
         "maxDCVoltage": "Number.NaN",
         "BEmfConstant": "Number.NaN",
-        "inertia": "Number.NaN",
+        "inertia": 6,
         "friction": "Number.NaN",
         "maxRatedSpeed": "Number.NaN",
         "hasHallSensor": false,
@@ -1172,7 +1172,7 @@
           "executionRate": "Number.NaN",
           "KpKiKd": {
             "P": {
-              "num": 100,
+              "num": 20,
               "den": 1024
             },
             "D": {
