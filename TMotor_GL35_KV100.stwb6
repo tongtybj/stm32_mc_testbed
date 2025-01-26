@@ -1075,7 +1075,7 @@
         "rs": "Number.NaN",
         "ls": "Number.NaN",
         "mmsLd_lq_ratio": "Number.NaN",
-        "maxCurrent": "Number.NaN",
+        "maxCurrent": 0.3,
         "maxDCVoltage": "Number.NaN",
         "BEmfConstant": "Number.NaN",
         "inertia": 6,
@@ -1172,7 +1172,7 @@
           "executionRate": "Number.NaN",
           "KpKiKd": {
             "P": {
-              "num": 20,
+              "num": 400,
               "den": 1024
             },
             "D": {
